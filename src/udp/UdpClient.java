@@ -1,10 +1,12 @@
 package udp;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.*;
 
 /**
  * 项目名：Network_Study
- * 描述：发送端
+ * 描述：发送端 实现多次交流
  **1、使用datagramSoclet指定端口，创建发送端
  *  * 2、准备数据（字节数组），
  *  3、封装成datagramPacket 指定目的地
@@ -21,12 +23,20 @@ public class UdpClient {
 //1、使用datagramSoclet指定端口，创建发送端
         DatagramSocket client = new DatagramSocket(8888);
 // 2、准备数据（字节数组），
-        String data = "hello";
-        byte[] datas = data.getBytes();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        while (true){
+
+            String data = reader.readLine();
+            byte[] datas = data.getBytes();
 // 3、封装成datagramPacket 指定目的地
-        DatagramPacket packet = new DatagramPacket(datas,0,datas.length,new InetSocketAddress("localhost",9999));
+            DatagramPacket packet = new DatagramPacket(datas,0,datas.length,new InetSocketAddress("localhost",9999));
 // 4、发送包裹
-        client.send(packet);
+            client.send(packet);
+            if (data.equals("bye")){
+                break;
+            }
+        }
+
 // 5、释放资源
         client.close();
     }
